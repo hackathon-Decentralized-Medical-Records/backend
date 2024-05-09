@@ -22,5 +22,4 @@ func Init() {
 		func(in fsnotify.Event) {
 			log.Error("The configuration file has been modified.")
 		})
-	return
 }

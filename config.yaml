@@ -1,10 +1,11 @@
-service:
+server:
   name: "Travel on Chain"
-  port: ":8080"
+  port: ":8888"
 LogConfig:
   mode: 1
 EthAddress:
   url: ""
 mysql:
-
 redis:
+jwt:
+  key: 9OLf5jK8s
