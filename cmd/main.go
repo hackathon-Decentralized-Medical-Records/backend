@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/spf13/viper"
 	"service/config"
 	"service/dao/mysql"
 	"service/log"
@@ -10,12 +9,12 @@ import (
 
 func init() {
 	config.Init()
-	log.Init(log.LogMode(viper.GetInt("LogConfig.mode")))
+	config.LoadConfig()
+	log.Init(log.LogMode(config.LogConfigMode))
 	mysql.Init()
 }
 
 func main() {
 	r := routers.Init()
-
-	r.Run(viper.GetString("server.port"))
+	r.Run(config.ServerPort)
 }

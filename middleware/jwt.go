@@ -3,12 +3,12 @@ package middleware
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
 	"net/http"
+	"service/config"
 	"time"
 )
 
-var JWTKEY = []byte(viper.GetString("jwt.key"))
+var JWTKEY = []byte(config.JwtKey)
 
 type Claims struct {
 	UserName string `json:"userName"`

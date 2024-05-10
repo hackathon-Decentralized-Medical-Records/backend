@@ -6,6 +6,18 @@ import (
 	"service/log"
 )
 
+var (
+	ServerName    string
+	ServerPort    string
+	LogConfigMode int
+	MysqlHost     string
+	MysqlPort     string
+	MysqlUser     string
+	MysqlPassword string
+	MysqlDbname   string
+	JwtKey        string
+)
+
 func Init() {
 	// 读取 配置文件
 	viper.SetConfigName("config")
@@ -22,4 +34,17 @@ func Init() {
 		func(in fsnotify.Event) {
 			log.Error("The configuration file has been modified.")
 		})
+}
+
+func LoadConfig() {
+	ServerName = viper.GetString("server.name")
+	ServerPort = viper.GetString("server.port")
+	LogConfigMode = viper.GetInt("LogConfig.mode")
+	ServerName = viper.GetString("server.name")
+	MysqlHost = viper.GetString("mysql.host")
+	MysqlPort = viper.GetString("mysql.post")
+	MysqlUser = viper.GetString("mysql.user")
+	MysqlPassword = viper.GetString("mysql.password")
+	MysqlDbname = viper.GetString("mysql.dbname")
+	JwtKey = viper.GetString("jwt.key")
 }
