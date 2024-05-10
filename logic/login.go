@@ -3,13 +3,13 @@ package logic
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"service/dao/mysql"
 	"service/middleware"
-	"service/models"
 )
 
 // 登录
 func Login(c *gin.Context) {
-	var user models.User
+	var user mysql.User
 	var token string
 	var code int = http.StatusInternalServerError
 	var msg string
@@ -19,9 +19,9 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	ok := models.LoginCheck(user.UserName, user.PassWord)
+	ok := LoginCheck(user.Email, user.PassWord)
 	if ok {
-		token, code = middleware.GenerateToken(user.UserName)
+		token, code = middleware.GenerateToken(user.Email)
 	}
 
 	msg = "登录失败"
@@ -34,4 +34,13 @@ func Login(c *gin.Context) {
 		"code":    code,
 		"token":   token,
 	})
+}
+
+// 登录校验
+func LoginCheck(userName, passWord string) bool {
+	code, _ := mysql.GetUserByNameAndPwd(userName, passWord)
+	if code == http.StatusOK {
+		return true
+	}
+	return false
 }

@@ -16,12 +16,12 @@ type Claims struct {
 }
 
 // 生成token
-func GenerateToken(userName string) (string, int) {
+func GenerateToken(loginId string) (string, int) {
 	expireTime := time.Now().Add(2 * time.Hour) //2小时过期
 
 	// 生成token
 	claims := Claims{
-		userName,
+		loginId,
 		jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "ginblog",

@@ -3,12 +3,12 @@ package routers
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"github.com/spf13/viper"
+	v1 "service/api/v1"
 	"service/logic"
 	"service/middleware"
 )
 
-func Init() {
+func Init() *gin.Engine {
 	// 支持跨域
 	r := gin.Default()
 	r.Use(cors.New(cors.Config{
@@ -28,18 +28,8 @@ func Init() {
 	router := r.Group("/api")
 	{
 		router.POST("/login", logic.Login)
+		router.POST("/register", v1.Register)
 	}
+	return r
 
-	port := viper.GetString("server.port")
-	_ = r.Run(port)
-
-	//// 检测用户是否登录
-	//v1.GET("/check-login", nil)
-	//// 登录
-	//v1.GET("/nonce", nil)
-	//v1.GET("/login", func(context *gin.Context) {
-	//	fmt.Println("login")
-	//})
-	//// 获取历史位置
-	//v1.POST("/location", nil)
 }

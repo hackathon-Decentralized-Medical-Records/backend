@@ -6,6 +6,11 @@ LogConfig:
 EthAddress:
   url: ""
 mysql:
+  host: "127.0.0.1"
+  port: "32768"
+  user: "root"
+  password: "mysqlpw"
+  dbname: "test"
 redis:
 jwt:
   key: 9OLf5jK8s
