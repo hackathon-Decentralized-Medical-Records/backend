@@ -1,0 +1,191 @@
+info:
+  contact: {}
+paths:
+  /api/getRecordByMedic:
+    get:
+      description: 获取医生挂号记录
+      parameters:
+      - description: 医生id
+        in: body
+        name: medicId
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: '{"data": "挂号记录"}'
+          schema:
+            type: string
+      summary: 获取医生挂号记录
+      tags:
+      - registration
+  /api/getRecordByPatient:
+    get:
+      description: 获取患者挂号记录
+      parameters:
+      - description: 患者id
+        in: body
+        name: patientId
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: '{"data": "挂号记录"}'
+          schema:
+            type: string
+      summary: 获取患者挂号记录
+      tags:
+      - registration
+  /api/getRecordList:
+    get:
+      description: 获取挂号记录列表
+      parameters:
+      - description: 患者id
+        in: body
+        name: patientId
+        schema:
+          type: integer
+      - description: 医生id
+        in: body
+        name: medicId
+        schema:
+          type: integer
+      - description: 挂号状态
+        in: body
+        name: status
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: '{"data": "挂号记录"}'
+          schema:
+            type: string
+      summary: 获取挂号记录列表
+      tags:
+      - registration
+  /api/login:
+    post:
+      description: 登录
+      parameters:
+      - description: 邮箱
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: '{"message": "登录成功"}'
+          schema:
+            type: string
+      summary: 登录
+      tags:
+      - 用户
+  /api/register:
+    post:
+      description: 注册用户
+      parameters:
+      - description: 用户名
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      - description: 邮箱
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: 角色
+        in: body
+        name: role
+        required: true
+        schema:
+          type: integer
+      - description: 职业
+        in: body
+        name: profession
+        schema:
+          type: string
+      - description: 科室
+        in: body
+        name: departmentId
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: ok
+          schema:
+            type: string
+      summary: 注册用户
+      tags:
+      - 用户
+  /api/registration:
+    post:
+      description: 生成挂号记录
+      parameters:
+      - description: 医生id
+        in: body
+        name: medicId
+        required: true
+        schema:
+          type: integer
+      - description: 患者id
+        in: body
+        name: patientId
+        required: true
+        schema:
+          type: integer
+      - description: 挂号状态
+        in: body
+        name: status
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: '{"message": "挂号成功"}'
+          schema:
+            type: string
+      summary: 生成挂号记录
+      tags:
+      - registration
+  /api/updateRecordStatus:
+    post:
+      description: 更新挂号记录状态
+      parameters:
+      - description: 挂号记录id
+        in: body
+        name: id
+        required: true
+        schema:
+          type: integer
+      - description: 挂号状态
+        in: body
+        name: status
+        required: true
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: '{"message": "更新成功"}'
+          schema:
+            type: string
+      summary: 更新挂号记录状态
+      tags:
+      - registration
+swagger: "2.0"

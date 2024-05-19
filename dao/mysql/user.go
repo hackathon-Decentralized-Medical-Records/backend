@@ -7,7 +7,6 @@ import (
 
 type User struct {
 	gorm.Model
-	ID       int    `gorm:"type:int;not null" json:"id" `
 	UserName string `gorm:"type:varchar(100);not null" json:"username" `
 	PassWord string `gorm:"type:varchar(65);not null" json:"password" `
 	Email    string `gorm:"type:varchar(100);not null" json:"email" `

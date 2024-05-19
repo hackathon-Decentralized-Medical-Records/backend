@@ -11,7 +11,7 @@ var (
 	ServerPort    string
 	LogConfigMode int
 	MysqlHost     string
-	MysqlPort     string
+	MysqlPort     int
 	MysqlUser     string
 	MysqlPassword string
 	MysqlDbname   string
@@ -42,7 +42,7 @@ func LoadConfig() {
 	LogConfigMode = viper.GetInt("LogConfig.mode")
 	ServerName = viper.GetString("server.name")
 	MysqlHost = viper.GetString("mysql.host")
-	MysqlPort = viper.GetString("mysql.post")
+	MysqlPort = viper.GetInt("mysql.port")
 	MysqlUser = viper.GetString("mysql.user")
 	MysqlPassword = viper.GetString("mysql.password")
 	MysqlDbname = viper.GetString("mysql.dbname")

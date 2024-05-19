@@ -8,6 +8,13 @@ import (
 )
 
 // 登录
+// @Summary 登录
+// @Description 登录
+// @Tags 用户
+// @param email body string true "邮箱"
+// @param password body string true "密码"
+// @Success 200 {string} string "{"message": "登录成功"}"
+// @Router /api/login [post]
 func Login(c *gin.Context) {
 	var user mysql.User
 	var token string
