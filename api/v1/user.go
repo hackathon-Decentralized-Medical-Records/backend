@@ -14,7 +14,10 @@ type requestParam struct {
 	// 职业
 	Profession string `json:"profession" `
 	// 科室
-	DepartmentId int `json:"departmentId" `
+	DepartmentId uint    `json:"departmentId" `
+	WorkTime     string  `json:"workTime" `
+	EndTime      string  `json:"endTime" `
+	Price        float64 `json:"price" `
 }
 
 // 注册用户
@@ -59,12 +62,12 @@ func Register(c *gin.Context) {
 	mysql.RegisterUser(&user)
 
 	// 注册医生
-	if user.Role == 1 {
+	if user.Role == 0 {
 		createMedic(&req, user.ID)
 	}
 
 	// 注册患者
-	if user.Role == 2 {
+	if user.Role == 1 {
 		createPatient(&req, user.ID)
 	}
 
@@ -76,10 +79,13 @@ func Register(c *gin.Context) {
 
 func createMedic(req *requestParam, id uint) {
 	medic := mysql.Medic{
-		Name:          req.UserName,
-		Department_Id: req.DepartmentId,
-		Profession:    req.Profession,
-		User_Id:       id,
+		Name:         req.UserName,
+		Profession:   req.Profession,
+		WorkTime:     req.WorkTime,
+		EndTime:      req.EndTime,
+		Price:        req.Price,
+		DepartmentID: req.DepartmentId,
+		UserID:       id,
 	}
 	mysql.InsertMedic(&medic)
 }

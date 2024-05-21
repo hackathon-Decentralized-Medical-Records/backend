@@ -26,12 +26,13 @@ func Init() {
 	}
 	// user 用户
 	db.Table(User{}.TableName()).AutoMigrate(&User{})
-	// medic 医生
-	db.Table(Medic{}.TableName()).AutoMigrate(&Medic{})
-	// patient 患者
-	db.Table(Patient{}.TableName()).AutoMigrate(&Patient{})
 	// department 科室
 	db.Table(Department{}.TableName()).AutoMigrate(&Department{})
+	// medic 医生
+	db.AutoMigrate(&Medic{}, &Department{}, &User{})
+	// patient 患者
+	db.Table(Patient{}.TableName()).AutoMigrate(&Patient{})
+
 	// registration 挂号
 	db.Table(Registration{}.TableName()).AutoMigrate(&Registration{})
 

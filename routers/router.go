@@ -38,6 +38,8 @@ func Init() *gin.Engine {
 		router.GET("/getRecordByMedic", v1.GetRecordByMedic)
 		router.GET("/getRecordByPatient", v1.GetRecordByPatient)
 		router.POST("/getRecordList", v1.GetList)
+		router.POST("/meidcList", v1.GetMedicList)
+		router.GET("/departmentList", v1.GetDeparmentList)
 	}
 	return r
 

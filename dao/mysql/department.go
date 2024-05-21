@@ -11,3 +11,10 @@ type Department struct {
 func (Department) TableName() string {
 	return "department"
 }
+
+func GetDepartment() []Department {
+
+	var departments []Department
+	db.Find(&departments)
+	return departments
+}

@@ -29,13 +29,14 @@ func CheckUserByEmail(email string) int {
 }
 
 // 校验登录信息
-func GetUserByNameAndPwd(loginId, passWord string) (int, string) {
+func GetUserByNameAndPwd(loginId, passWord string) (int, string, User) {
 	var user User
 	db.Where("email = ? AND pass_word = ?", loginId, passWord).First(&user)
 	if user.ID <= 0 {
-		return httputils.StatusNotFound, "用户不存在"
+		return httputils.StatusUnauthorized, "登录失败", user
 	}
-	return httputils.StatusOK, "登录成功"
+	user.PassWord = ""
+	return httputils.StatusOK, "登录成功", user
 }
 
 // 注册用户信息

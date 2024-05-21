@@ -15,6 +15,16 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/departmentList": {
+            "get": {
+                "description": "获取科室列表",
+                "tags": [
+                    "科室"
+                ],
+                "summary": "获取科室列表",
+                "responses": {}
+            }
+        },
         "/api/getRecordByMedic": {
             "get": {
                 "description": "获取医生挂号记录",
@@ -149,6 +159,15 @@ const docTemplate = `{
                         }
                     }
                 }
+            }
+        },
+        "/api/meidcList": {
+            "post": {
+                "tags": [
+                    "医生"
+                ],
+                "summary": "获取医生列表",
+                "responses": {}
             }
         },
         "/api/register": {

@@ -1,6 +1,13 @@
 info:
   contact: {}
 paths:
+  /api/departmentList:
+    get:
+      description: 获取科室列表
+      responses: {}
+      summary: 获取科室列表
+      tags:
+      - 科室
   /api/getRecordByMedic:
     get:
       description: 获取医生挂号记录
@@ -88,6 +95,12 @@ paths:
       summary: 登录
       tags:
       - 用户
+  /api/meidcList:
+    post:
+      responses: {}
+      summary: 获取医生列表
+      tags:
+      - 医生
   /api/register:
     post:
       description: 注册用户
