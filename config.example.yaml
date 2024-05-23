@@ -1,0 +1,17 @@
+server:
+  name: "Service"
+  port: ":8080"
+LogConfig:
+  mode: 1   # 0 直接输出到标准输出  1 输出到文件
+eth:
+  apiKeyUrl: "https://arbitrum-sepolia.infura.io/v3/xxx"
+  contractUrl: "0xxxxxxx"
+mysql:
+  host: "127.0.0.1"
+  port: "3306"
+  user: "root"
+  password: "mysql"
+  dbname: "test"
+redis:
+jwt:
+  key: adcde
