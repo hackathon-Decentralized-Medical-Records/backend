@@ -11,7 +11,7 @@ import (
 // @Router /api/meidcList [post]
 func GetMedicList(c *gin.Context) {
 	var medic mysql.Medic
-	if err := c.ShouldBindJSON(&medic); err != nil {
+	if err := c.ShouldBindQuery(&medic); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
