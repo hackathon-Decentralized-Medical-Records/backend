@@ -6,6 +6,7 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	v1 "service/api/v1"
+	"service/dao/ipfs"
 	_ "service/docs"
 	"service/logic"
 	"service/middleware"
@@ -14,6 +15,8 @@ import (
 func Init() *gin.Engine {
 	// 支持跨域
 	r := gin.Default()
+	//r.Static("/uploads", "./uploads")
+	r.GET("/ipfs", ipfs.CheckFileExistAndGet)
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
@@ -40,7 +43,7 @@ func Init() *gin.Engine {
 		router.POST("/getRecordList", v1.GetList)
 		router.POST("/meidcList", v1.GetMedicList)
 		router.GET("/departmentList", v1.GetDeparmentList)
+		router.POST("/provider/upload", ipfs.UploadFileHandler)
 	}
 	return r
-
 }
