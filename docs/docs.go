@@ -15,6 +15,89 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/accredit/getAccredit": {
+            "post": {
+                "description": "查询授权",
+                "tags": [
+                    "accredit"
+                ],
+                "summary": "查询授权",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "medicId",
+                        "name": "medicId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "registrationId",
+                        "name": "registrationId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "caseId",
+                        "name": "caseId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"data\": \"accredits\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/accredit/save": {
+            "post": {
+                "description": "新增授权",
+                "tags": [
+                    "accredit"
+                ],
+                "summary": "新增授权",
+                "parameters": [
+                    {
+                        "description": "medicId",
+                        "name": "medicId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "registrationId",
+                        "name": "registrationId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "caseId",
+                        "name": "caseId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"success\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/api/departmentList": {
             "get": {
                 "description": "获取科室列表",
@@ -317,6 +400,69 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "{\"message\": \"更新成功\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/case/getCaseByPatientId": {
+            "get": {
+                "description": "查询病例",
+                "tags": [
+                    "case"
+                ],
+                "summary": "查询病例",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "patientId",
+                        "name": "patientId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"data\": \"cases\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/case/save": {
+            "post": {
+                "description": "新增病例",
+                "tags": [
+                    "case"
+                ],
+                "summary": "新增病例",
+                "parameters": [
+                    {
+                        "description": "patientId",
+                        "name": "patientId",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "description": "content",
+                        "name": "content",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"msg\": \"success\"}",
                         "schema": {
                             "type": "string"
                         }

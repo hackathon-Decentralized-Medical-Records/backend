@@ -1,6 +1,60 @@
 info:
   contact: {}
 paths:
+  /accredit/getAccredit:
+    post:
+      description: 查询授权
+      parameters:
+      - description: medicId
+        in: query
+        name: medicId
+        type: integer
+      - description: registrationId
+        in: query
+        name: registrationId
+        type: integer
+      - description: caseId
+        in: query
+        name: caseId
+        type: integer
+      responses:
+        "200":
+          description: '{"data": "accredits"}'
+          schema:
+            type: string
+      summary: 查询授权
+      tags:
+      - accredit
+  /accredit/save:
+    post:
+      description: 新增授权
+      parameters:
+      - description: medicId
+        in: body
+        name: medicId
+        required: true
+        schema:
+          type: integer
+      - description: registrationId
+        in: body
+        name: registrationId
+        required: true
+        schema:
+          type: integer
+      - description: caseId
+        in: body
+        name: caseId
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: '{"msg": "success"}'
+          schema:
+            type: string
+      summary: 新增授权
+      tags:
+      - accredit
   /api/departmentList:
     get:
       description: 获取科室列表
@@ -201,4 +255,45 @@ paths:
       summary: 更新挂号记录状态
       tags:
       - registration
+  /case/getCaseByPatientId:
+    get:
+      description: 查询病例
+      parameters:
+      - description: patientId
+        in: query
+        name: patientId
+        required: true
+        type: integer
+      responses:
+        "200":
+          description: '{"data": "cases"}'
+          schema:
+            type: string
+      summary: 查询病例
+      tags:
+      - case
+  /case/save:
+    post:
+      description: 新增病例
+      parameters:
+      - description: patientId
+        in: body
+        name: patientId
+        required: true
+        schema:
+          type: integer
+      - description: content
+        in: body
+        name: content
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: '{"msg": "success"}'
+          schema:
+            type: string
+      summary: 新增病例
+      tags:
+      - case
 swagger: "2.0"

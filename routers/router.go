@@ -44,6 +44,10 @@ func Init() *gin.Engine {
 		router.POST("/meidcList", v1.GetMedicList)
 		router.GET("/departmentList", v1.GetDeparmentList)
 		router.POST("/provider/upload", ipfs.UploadFileHandler)
+		router.POST("/case/save", v1.InsertCase)
+		router.GET("/case/getCaseByPatientId", v1.GetCaseByPatientId)
+		router.POST("/accredit/save", v1.InertAccredit)
+		router.POST("/accredit/accreditList", v1.GetAccredit)
 	}
 	return r
 }

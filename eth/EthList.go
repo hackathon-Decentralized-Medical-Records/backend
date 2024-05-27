@@ -2,10 +2,21 @@ package eth
 
 import (
 	"context"
+	"crypto/ecdsa"
+	"fmt"
+	"github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
+	"github.com/gin-gonic/gin"
 	"log"
-	"service/config"
+	"math/big"
+	"service/eth/contracts"
+	"strings"
+	"time"
 )
 
 // 1.先注册账号
@@ -16,15 +27,90 @@ import (
 // 6.编写业务代码
 //
 
-func NewContract() {
-	_, err := ethclient.DialContext(context.Background(), config.EthApiKeyUrl)
+type RoleType uint8
+
+func AddContract(c *gin.Context) {
+	client, err := ethclient.DialContext(context.Background(), "wss://sepolia.infura.io/ws/v3/7de12dd4579a405f85cf228a0c9beebf")
 	if err != nil {
 		log.Fatal(err)
 	}
 	//// 合约地址
-	common.HexToAddress(config.EthContractUrl)
+	contractAddress := common.HexToAddress("0xEe524AF17809c97F1C803b69BB0e20d414588aB1")
+
+	privateKey, err := crypto.HexToECDSA("35dd82fefef019ac146d2969a6e571e60cee7bc66dc360b1d1e498ef1dedd669")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	publicKey := privateKey.Public()
+	publicKeyECDSA, ok := publicKey.(*ecdsa.PublicKey)
+	if !ok {
+		log.Fatal("error casting public key to ECDSA")
+	}
+
+	fromAddress := crypto.PubkeyToAddress(*publicKeyECDSA)
+	nonce, err := client.PendingNonceAt(context.Background(), fromAddress)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	gasPrice, err := client.SuggestGasPrice(context.Background())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	auth := bind.NewKeyedTransactor(privateKey)
+	auth.Nonce = big.NewInt(int64(nonce))
+	auth.Value = big.NewInt(0)     // in wei
+	auth.GasLimit = uint64(300000) // in units
+	auth.GasPrice = gasPrice
+
+	contractAbi, err := abi.JSON(strings.NewReader(string(contracts.ContractsABI)))
+
+	txData, err := contractAbi.Pack("addNewUserToSystem", uint8(1))
+	tx := types.NewTransaction(nonce, contractAddress, big.NewInt(0), auth.GasLimit, auth.GasPrice, txData)
+
+	signedTx, err := types.SignTx(tx, types.HomesteadSigner{}, privateKey)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = client.SendTransaction(context.Background(), signedTx)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("Transaction sent: %s\n", signedTx.Hash().Hex())
+
+}
+
+func NewContract(c *gin.Context) {
+	client, err := ethclient.DialContext(context.Background(), "wss://sepolia.infura.io/ws/v3/7de12dd4579a405f85cf228a0c9beebf")
+	if err != nil {
+		log.Fatal(err)
+	}
+	//// 合约地址
+	address := common.HexToAddress("0xEe524AF17809c97F1C803b69BB0e20d414588aB1")
 	//// 创建合约实例
+	query := ethereum.FilterQuery{
+		Addresses: []common.Address{
+			address,
+		},
+	}
+	logs := make(chan types.Log)
+	sub, err := client.SubscribeFilterLogs(context.Background(), query, logs)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	////调用合约函数
+	log.Println("监听中........", time.Now())
 
+	// 监听
+	for {
+		select {
+		case err := <-sub.Err():
+			log.Fatal(err)
+		case vLog := <-logs:
+			fmt.Println(vLog) // pointer to event log
+		}
+	}
 }
