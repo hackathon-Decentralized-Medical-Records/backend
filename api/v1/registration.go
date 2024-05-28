@@ -21,6 +21,11 @@ func CreateRecord(c *gin.Context) {
 		c.JSON(400, gin.H{"message": "参数错误"})
 		return
 	}
+	// 主动发信息给到 医生客户端
+
+	// 将输入的钱包地址 + 生成合约上链
+
+	// 插入数据库
 	mysql.InsertRegistration(&registration)
 	c.JSON(200, gin.H{"message": "挂号成功"})
 }
@@ -40,6 +45,14 @@ func UpdateRecordStatus(c *gin.Context) {
 		c.JSON(400, gin.H{"message": "参数错误"})
 		return
 	}
+	// 检查是否有差异
+
+	// 检查时间
+
+	// 如果是取消，则上链
+
+	// 如果是就诊，则修改数据库
+
 	mysql.UpdateStatus(registration.ID, registration.Status)
 	c.JSON(200, gin.H{"message": "更新成功"})
 }
