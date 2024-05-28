@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 	"service/dao/mysql"
 	"service/utils/httputils"
@@ -14,10 +15,11 @@ type requestParam struct {
 	// 职业
 	Profession string `json:"profession" `
 	// 科室
-	DepartmentId uint    `json:"departmentId" `
-	WorkTime     string  `json:"workTime" `
-	EndTime      string  `json:"endTime" `
-	Price        float64 `json:"price" `
+	DepartmentId uint           `json:"departmentId" `
+	WorkTime     string         `json:"workTime" `
+	EndTime      string         `json:"endTime" `
+	Price        float64        `json:"price" `
+	Address      common.Address `json:"address"`
 }
 
 // 注册用户
@@ -57,6 +59,7 @@ func Register(c *gin.Context) {
 		PassWord: req.PassWord,
 		Email:    req.Email,
 		Role:     req.Role,
+		Address:  req.Address,
 	}
 	// 注册用户表
 	mysql.RegisterUser(&user)

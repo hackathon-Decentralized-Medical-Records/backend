@@ -1,6 +1,8 @@
 package mysql
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 // Patient 患者
 type Patient struct {
