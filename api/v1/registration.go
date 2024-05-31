@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"service/dao/mysql"
+	"strconv"
 )
 
 // 生成挂号记录
@@ -65,14 +66,15 @@ func UpdateRecordStatus(c *gin.Context) {
 // @Success 200 {string} string "{"data": "挂号记录"}"
 // @Router /api/getRecordByMedic [get]
 func GetRecordByMedic(c *gin.Context) {
-	var registration mysql.Registration
-	err := c.ShouldBindJSON(&registration)
+	var medicId uint
+	param := c.Query("medicId")
+	parsedId, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
 		return
 	}
-
-	records := mysql.GetRecordByMedic(registration.Medic_Id)
+	medicId = uint(parsedId)
+	records := mysql.GetRecordByMedic(medicId)
 	c.JSON(200, gin.H{"data": records})
 }
 
@@ -84,14 +86,16 @@ func GetRecordByMedic(c *gin.Context) {
 // @Success 200 {string} string "{"data": "挂号记录"}"
 // @Router /api/getRecordByPatient [get]
 func GetRecordByPatient(c *gin.Context) {
-	var registration mysql.Registration
-	err := c.ShouldBindJSON(&registration)
+	var patientId uint
+	param := c.Query("patientId")
+	parsedId, err := strconv.ParseUint(param, 10, 32)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
 		return
 	}
+	patientId = uint(parsedId)
 
-	records := mysql.GetRecordByPatient(registration.Patient_Id)
+	records := mysql.GetRecordByPatient(patientId)
 	c.JSON(200, gin.H{"data": records})
 }
 
