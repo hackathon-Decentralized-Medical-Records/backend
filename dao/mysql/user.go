@@ -14,6 +14,10 @@ type User struct {
 	Address  string `gorm:"type:varchar(42);column:address" json:"address"`
 }
 
+type Response struct {
+	Data interface{} `json:"data"`
+}
+
 func (User) TableName() string {
 	return "user"
 }
@@ -30,14 +34,39 @@ func CheckUserByEmail(email string) int {
 }
 
 // 校验登录信息
-func GetUserByNameAndPwd(loginId, passWord string) (int, string, User) {
+func GetUserByNameAndPwd(loginId, passWord string) (int, string, Response) {
 	var user User
+	var response Response
 	db.Where("email = ? AND pass_word = ?", loginId, passWord).First(&user)
 	if user.ID <= 0 {
-		return httputils.StatusUnauthorized, "登录失败", user
+		return httputils.StatusUnauthorized, "登录失败", response
 	}
 	user.PassWord = ""
-	return httputils.StatusOK, "登录成功", user
+
+	// 如果是医生则查询医生信息
+
+	if user.Role == 0 {
+		//只查一条数据
+		var medic Medic
+		tx := db.Table(Medic{}.TableName()).Where("user_id = ?", user.ID).Take(&medic)
+		if tx.Error != nil {
+			return httputils.StatusInternalServerError, "登录失败", response
+		}
+		response.Data = medic
+		return httputils.StatusOK, "登录成功", response
+	}
+
+	if user.Role == 1 {
+		var patient Patient
+		tx := db.Table(Patient{}.TableName()).Where("user_id = ?", user.ID).Take(&patient)
+		if tx.Error != nil {
+			return httputils.StatusInternalServerError, "登录失败", response
+		}
+		response.Data = patient
+		return httputils.StatusOK, "登录成功", response
+	}
+	return httputils.StatusInternalServerError, "登录失败", response
+
 }
 
 // 注册用户信息

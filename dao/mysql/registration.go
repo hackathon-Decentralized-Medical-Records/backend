@@ -8,9 +8,9 @@ import (
 // Registration 挂号
 type Registration struct {
 	gorm.Model
-	PatientId uint    `gorm:"not null" json:"patientId" `
+	PatientId uint    `gorm:"type:int;not null" json:"patientId" `
 	Patient   Patient `gorm:"foreignKey:PatientId" json:"patient"`
-	MedicId   uint    `gorm:"not null" json:"medicId" `
+	MedicId   uint    `gorm:"type:int;not null" json:"medicId" `
 	Medic     Medic   `gorm:"foreignKey:MedicId" json:"medic"`
 	// 挂号状态 1-已挂号 2-已就诊 3-已退号
 	Status       int       `gorm:"type:int;not null" json:"status" `

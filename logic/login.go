@@ -26,7 +26,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	ok, user := LoginCheck(user.Email, user.PassWord)
+	ok, re := LoginCheck(user.Email, user.PassWord)
 	if ok {
 		token, code = middleware.GenerateToken(user.Email)
 	}
@@ -41,7 +41,7 @@ func Login(c *gin.Context) {
 		"message": msg,
 		"code":    code,
 		"data": gin.H{
-			"user":  user,
+			"data":  re,
 			"token": token,
 		},
 	})
@@ -57,10 +57,10 @@ func Login(c *gin.Context) {
 }
 
 // 登录校验
-func LoginCheck(userName, passWord string) (bool, mysql.User) {
-	code, _, user := mysql.GetUserByNameAndPwd(userName, passWord)
+func LoginCheck(userName, passWord string) (bool, mysql.Response) {
+	code, _, response := mysql.GetUserByNameAndPwd(userName, passWord)
 	if code == http.StatusOK {
-		return true, user
+		return true, response
 	}
-	return false, user
+	return false, response
 }
