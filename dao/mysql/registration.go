@@ -8,9 +8,10 @@ import (
 // Registration 挂号
 type Registration struct {
 	gorm.Model
-	Patient_Id uint  `gorm:"type:int;not null" json:"patientId" `
-	Medic_Id   uint  `gorm:"type:int;not null" json:"medicId" `
-	Medic      Medic `gorm:"foreignKey:Medic_Id" json:"medic"`
+	PatientId uint    `gorm:"not null" json:"patientId" `
+	Patient   Patient `gorm:"foreignKey:PatientId" json:"patient"`
+	MedicId   uint    `gorm:"not null" json:"medicId" `
+	Medic     Medic   `gorm:"foreignKey:MedicId" json:"medic"`
 	// 挂号状态 1-已挂号 2-已就诊 3-已退号
 	Status       int       `gorm:"type:int;not null" json:"status" `
 	RegisterDate time.Time `gorm:"type:datetime;not null;default:CURRENT_TIMESTAMP" json:"registerDate"`
@@ -47,7 +48,7 @@ func GetRecordByMedic(medicId uint) []Registration {
 // GetRecordByPatient 根据患者id获取挂号记录
 func GetRecordByPatient(patientId uint) []Registration {
 	var records []Registration
-	tx := db.Where("patient_id=?", patientId).Find(&records)
+	tx := db.Preload("Patient").Where("patient_id=?", patientId).Find(&records)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
