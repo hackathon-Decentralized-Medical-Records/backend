@@ -8,6 +8,7 @@ import (
 	v1 "service/api/v1"
 	"service/dao/ipfs"
 	_ "service/docs"
+	"service/eth"
 	"service/logic"
 	"service/middleware"
 )
@@ -60,7 +61,7 @@ func Init() *gin.Engine {
 		router.POST("/accredit/save", v1.InertAccredit)
 		// 查询授权
 		router.POST("/accredit/accreditList", v1.GetAccredit)
-
+		router.GET("/demo", eth.GetPatient)
 	}
 	return r
 }

@@ -1,7 +1,6 @@
 package v1
 
 import (
-	"github.com/ethereum/go-ethereum/common"
 	"github.com/gin-gonic/gin"
 	"service/dao/mysql"
 	"service/utils/httputils"
@@ -15,11 +14,11 @@ type requestParam struct {
 	// 职业
 	Profession string `json:"profession" `
 	// 科室
-	DepartmentId uint           `json:"departmentId" `
-	WorkTime     string         `json:"workTime" `
-	EndTime      string         `json:"endTime" `
-	Price        float64        `json:"price" `
-	Address      common.Address `json:"address"`
+	DepartmentId uint    `json:"departmentId" `
+	WorkTime     string  `json:"workTime" `
+	EndTime      string  `json:"endTime" `
+	Price        float64 `json:"price" `
+	Address      string  `json:"address"`
 }
 
 // 注册用户

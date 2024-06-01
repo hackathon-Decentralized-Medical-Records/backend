@@ -28,7 +28,7 @@ func Init() {
 	db.Table(Department{}.TableName()).AutoMigrate(&Department{})
 	db.AutoMigrate(&Medic{}, &Department{}, &User{})
 	db.Table(Patient{}.TableName()).AutoMigrate(&Patient{})
-	db.Table(Registration{}.TableName()).AutoMigrate(&Registration{})
+	db.AutoMigrate(Registration{}, Medic{})
 	db.AutoMigrate(&Case{}, &Patient{})
 	db.AutoMigrate(&Accredut{})
 
