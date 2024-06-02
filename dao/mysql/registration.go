@@ -29,7 +29,7 @@ func InsertRegistration(entity *Registration) {
 }
 
 func UpdateStatus(id uint, status int) {
-	tx := db.Where("id=?", id).Update("status", status)
+	tx := db.Model(&Registration{}).Where("id=?", id).Update("status", status)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
