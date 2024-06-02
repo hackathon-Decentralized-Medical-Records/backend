@@ -156,12 +156,13 @@ func GetPatient(c *gin.Context) {
 	}
 
 	fmt.Println("contract:", contract)
-	newContracts, err := role.NewContracts(contractAddress, client)
+	newContracts, err := role.NewContracts(contract, client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	opts, err := bind.NewKeyedTransactorWithChainID(privateKey, big.NewInt(11155111))
+	fmt.Println(opts)
 	opts.GasLimit = uint64(3000000)
 	if err != nil {
 		log.Fatalf("Failed to create authorized transactor: %v", err)
@@ -170,32 +171,30 @@ func GetPatient(c *gin.Context) {
 	address := common.HexToAddress("0xEBc29CA8Dd95DF5790746e172F79734D7D524898")
 	material, err := newContracts.SetApprovalForAddingMaterial(opts, address)
 
-	fmt.Println("material:", material)
+	fmt.Println("material:", material.Data())
 
 	//// 时间戳 转成bin。int
-	//timestamp := time.Now().Unix()
-	//timestampBigInt := big.NewInt(timestamp)
-	//opts.Value = big.NewInt(100000000000000) // 1 ETH，替换为你需要的值
-	//
-	//balance, err := client.BalanceAt(context.Background(), fromAddress, nil)
-	//if err != nil {
-	//	log.Fatalf("Failed to retrieve account balance: %v", err)
-	//}
-	//
-	//fmt.Printf("Account balance: %s wei\n", balance.String())
-	//
-	//instance.RequestReservation(opts, address, timestampBigInt)
-	//
-	//// 设置调用选项
-	//infoOpt := &bind.CallOpts{
-	//	From:    fromAddress,
-	//	Context: context.Background(),
-	//}
-	//
-	//// 医生账户地址
-	//info, err := instance.GetReservationInfo(infoOpt)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
-	//fmt.Println("info:", info.Hex())
+	timestamp := time.Now().Unix()
+	timestampBigInt := big.NewInt(timestamp)
+	opts.Value = big.NewInt(100000000000000) // 1 ETH，替换为你需要的值
+
+	balance, err := client.BalanceAt(context.Background(), fromAddress, nil)
+	if err != nil {
+		log.Fatalf("Failed to retrieve account balance: %v", err)
+	}
+	fmt.Printf("Account balance: %s wei\n", balance.String())
+	instance.RequestReservation(opts, address, timestampBigInt)
+
+	// 设置调用选项
+	infoOpt := &bind.CallOpts{
+		From:    fromAddress,
+		Context: context.Background(),
+	}
+
+	// 医生账户地址
+	info, err := instance.GetReservationInfo(infoOpt)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("info:", info.Hex())
 }

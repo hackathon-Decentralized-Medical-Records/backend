@@ -38,17 +38,18 @@ func UpdateStatus(id uint, status int) {
 // GetRecordByMedic 根据医生id获取挂号记录
 func GetRecordByMedic(medicId uint) []Registration {
 	var records []Registration
-	tx := db.Preload("Medic").Where("medic_id=?", medicId).Find(&records)
+	tx := db.Preload("Patient").Preload("Medic").Preload("Medic.Department").Where("medic_id=?", medicId).Find(&records)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
+
 	return records
 }
 
 // GetRecordByPatient 根据患者id获取挂号记录
 func GetRecordByPatient(patientId uint) []Registration {
 	var records []Registration
-	tx := db.Preload("Patient").Where("patient_id=?", patientId).Find(&records)
+	tx := db.Preload("Medic").Preload("Medic.Department").Preload("Patient").Where("patient_id=?", patientId).Find(&records)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}
