@@ -1,7 +1,8 @@
-package mysql
+package service
 
 import (
 	"gorm.io/gorm"
+	"service/global"
 	"service/utils/httputils"
 )
 
@@ -25,7 +26,7 @@ func (User) TableName() string {
 // 校验用户是否存在
 func CheckUserByEmail(email string) int {
 	var user User
-	db.Where("email = ?", email).First(&user)
+	global.GVA_DATABASE.Where("email = ?", email).First(&user)
 	if user.ID > 0 {
 		return httputils.StatusConflict
 	}
@@ -37,7 +38,7 @@ func CheckUserByEmail(email string) int {
 func GetUserByNameAndPwd(loginId, passWord string) (int, string, Response) {
 	var user User
 	var response Response
-	db.Where("email = ? AND pass_word = ?", loginId, passWord).First(&user)
+	global.GVA_DATABASE.Where("email = ? AND pass_word = ?", loginId, passWord).First(&user)
 	if user.ID <= 0 {
 		return httputils.StatusUnauthorized, "登录失败", response
 	}
@@ -48,7 +49,7 @@ func GetUserByNameAndPwd(loginId, passWord string) (int, string, Response) {
 	if user.Role == 0 {
 		//只查一条数据
 		var medic Medic
-		tx := db.Table(Medic{}.TableName()).Where("user_id = ?", user.ID).Take(&medic)
+		tx := global.GVA_DATABASE.Table(Medic{}.TableName()).Where("user_id = ?", user.ID).Take(&medic)
 		if tx.Error != nil {
 			return httputils.StatusInternalServerError, "登录失败", response
 		}
@@ -58,7 +59,7 @@ func GetUserByNameAndPwd(loginId, passWord string) (int, string, Response) {
 
 	if user.Role == 1 {
 		var patient Patient
-		tx := db.Table(Patient{}.TableName()).Where("user_id = ?", user.ID).Take(&patient)
+		tx := global.GVA_DATABASE.Table(Patient{}.TableName()).Where("user_id = ?", user.ID).Take(&patient)
 		if tx.Error != nil {
 			return httputils.StatusInternalServerError, "登录失败", response
 		}
@@ -71,6 +72,6 @@ func GetUserByNameAndPwd(loginId, passWord string) (int, string, Response) {
 
 // 注册用户信息
 func RegisterUser(user *User) (int, string) {
-	db.Create(user)
+	global.GVA_DATABASE.Create(user)
 	return httputils.StatusOK, "注册成功"
 }

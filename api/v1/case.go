@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"service/dao/mysql"
+	"service/service"
 	"strconv"
 )
 
@@ -15,13 +15,13 @@ import (
 // @Success 200 {string} string "{"msg": "success"}"
 // @Router /case/save [post]
 func InsertCase(c *gin.Context) {
-	var entity mysql.Case
+	var entity service.Case
 	if err := c.ShouldBindJSON(&entity); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
 
-	if err := mysql.InsertCase(&entity); err != nil {
+	if err := service.InsertCase(&entity); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
@@ -45,7 +45,7 @@ func GetCaseByPatientId(c *gin.Context) {
 	}
 
 	u := uint(parseUint)
-	if cases, err := mysql.GetCase(u); err != nil {
+	if cases, err := service.GetCase(u); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return
 	} else {

@@ -1,6 +1,9 @@
-package mysql
+package service
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"service/global"
+)
 
 // 授权
 type Accredut struct {
@@ -24,7 +27,7 @@ func (Accredut) TableName() string {
 
 // InsertAccredit 新增授权
 func InsertAccredit(entity *Accredut) error {
-	tx := db.Create(entity)
+	tx := global.GVA_DATABASE.Create(entity)
 	return tx.Error
 }
 
@@ -32,7 +35,7 @@ func InsertAccredit(entity *Accredut) error {
 func GetAccredit(entity *Accredut) ([]Case, error) {
 	var accredits []Accredut
 
-	query := db.Model(&entity)
+	query := global.GVA_DATABASE.Model(&entity)
 	if entity.MedicId != 0 {
 		query = query.Where("medic_id=?", entity.MedicId)
 	}

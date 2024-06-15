@@ -1,9 +1,8 @@
-package logic
+package service
 
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"service/dao/mysql"
 	"service/middleware"
 )
 
@@ -16,7 +15,7 @@ import (
 // @Success 200 {string} string "{"message": "登录成功"}"
 // @Router /api/login [post]
 func Login(c *gin.Context) {
-	var user mysql.User
+	var user User
 	var token string
 	var code int = http.StatusInternalServerError
 	var msg string
@@ -57,8 +56,8 @@ func Login(c *gin.Context) {
 }
 
 // 登录校验
-func LoginCheck(userName, passWord string) (bool, mysql.Response) {
-	code, _, response := mysql.GetUserByNameAndPwd(userName, passWord)
+func LoginCheck(userName, passWord string) (bool, Response) {
+	code, _, response := GetUserByNameAndPwd(userName, passWord)
 	if code == http.StatusOK {
 		return true, response
 	}

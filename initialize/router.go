@@ -1,42 +1,30 @@
-package routers
+package initialize
 
 import (
-	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	v1 "service/api/v1"
-	"service/dao/ipfs"
-	_ "service/docs"
 	"service/eth"
-	"service/logic"
 	"service/middleware"
+	"service/service"
 )
 
-func Init() *gin.Engine {
-	// 支持跨域
+func Routers() *gin.Engine {
 	r := gin.Default()
 	//r.Static("/uploads", "./uploads")
-	r.GET("/ipfs", ipfs.CheckFileExistAndGet)
-	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Type"},
-		AllowCredentials: true, // 允许携带 Cookie
-	}))
+	r.GET("/ipfs", service.CheckFileExistAndGet)
+	r.Use(middleware.Cors())
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// 鉴权 TODO 因为当前就一个接口 所以暂时不做鉴权 在user都授予了角色
 	auth := r.Group("/api")
 	auth.Use(middleware.JWTAuth())
-	{
-
-	}
 
 	router := r.Group("/api")
 	{
 		// 登录
-		router.POST("/login", logic.Login)
+		router.POST("/login", service.Login)
 		// 注册用户
 		router.POST("/register", v1.Register)
 		// 生成挂号记录
@@ -52,7 +40,7 @@ func Init() *gin.Engine {
 		router.POST("/meidcList", v1.GetMedicList)
 		// 获取科室列表
 		router.GET("/departmentList", v1.GetDeparmentList)
-		router.POST("/provider/upload", ipfs.UploadFileHandler)
+		router.POST("/provider/upload", service.UploadFileHandler)
 		// 新增病例
 		router.POST("/case/save", v1.InsertCase)
 		// 查询病例

@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"service/dao/mysql"
+	"service/service"
 	"strconv"
 	"strings"
 )
@@ -44,12 +44,12 @@ func InertAccredit(c *gin.Context) {
 			}
 			u := uint(parseUint)
 
-			accredut := mysql.Accredut{
+			accredut := service.Accredut{
 				MedicId:        entity.MedicId,
 				RegistrationId: entity.RegistrationId,
 				CaseId:         u,
 			}
-			if err := mysql.InsertAccredit(&accredut); err != nil {
+			if err := service.InsertAccredit(&accredut); err != nil {
 				c.JSON(400, gin.H{"msg": err.Error()})
 				return
 			}
@@ -63,13 +63,13 @@ func InertAccredit(c *gin.Context) {
 		}
 		u := uint(parseUint)
 
-		entity := mysql.Accredut{
+		entity := service.Accredut{
 			MedicId:        entity.MedicId,
 			RegistrationId: entity.RegistrationId,
 			CaseId:         u,
 		}
 
-		if err := mysql.InsertAccredit(&entity); err != nil {
+		if err := service.InsertAccredit(&entity); err != nil {
 			c.JSON(400, gin.H{"msg": err.Error()})
 			return
 		}
@@ -88,13 +88,13 @@ func InertAccredit(c *gin.Context) {
 // @Success 200 {string} string "{"data": "accredits"}"
 // @Router /accredit/getAccredit [POST]
 func GetAccredit(c *gin.Context) {
-	var entity mysql.Accredut
+	var entity service.Accredut
 	if err := c.ShouldBindQuery(&entity); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return
 	}
 
-	if accredits, err := mysql.GetAccredit(&entity); err != nil {
+	if accredits, err := service.GetAccredit(&entity); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return
 	} else {

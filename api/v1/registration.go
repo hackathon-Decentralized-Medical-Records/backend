@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"service/dao/mysql"
+	"service/service"
 	"strconv"
 )
 
@@ -16,7 +16,7 @@ import (
 // @Success 200 {string} string "{"message": "挂号成功"}"
 // @Router /api/registration [post]
 func CreateRecord(c *gin.Context) {
-	var registration mysql.Registration
+	var registration service.Registration
 	err := c.ShouldBindJSON(&registration)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
@@ -27,7 +27,7 @@ func CreateRecord(c *gin.Context) {
 	// 将输入的钱包地址 + 生成合约上链
 
 	// 插入数据库
-	mysql.InsertRegistration(&registration)
+	service.InsertRegistration(&registration)
 	c.JSON(200, gin.H{"message": "挂号成功"})
 }
 
@@ -40,7 +40,7 @@ func CreateRecord(c *gin.Context) {
 // @Success 200 {string} string "{"message": "更新成功"}"
 // @Router /api/updateRecordStatus [post]
 func UpdateRecordStatus(c *gin.Context) {
-	var registration mysql.Registration
+	var registration service.Registration
 	err := c.ShouldBindJSON(&registration)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
@@ -54,7 +54,7 @@ func UpdateRecordStatus(c *gin.Context) {
 
 	// 如果是就诊，则修改数据库
 
-	mysql.UpdateStatus(registration.ID, registration.Status)
+	service.UpdateStatus(registration.ID, registration.Status)
 	c.JSON(200, gin.H{"message": "更新成功"})
 }
 
@@ -74,7 +74,7 @@ func GetRecordByMedic(c *gin.Context) {
 		return
 	}
 	medicId = uint(parsedId)
-	records := mysql.GetRecordByMedic(medicId)
+	records := service.GetRecordByMedic(medicId)
 	c.JSON(200, gin.H{"data": records})
 }
 
@@ -95,7 +95,7 @@ func GetRecordByPatient(c *gin.Context) {
 	}
 	patientId = uint(parsedId)
 
-	records := mysql.GetRecordByPatient(patientId)
+	records := service.GetRecordByPatient(patientId)
 	c.JSON(200, gin.H{"data": records})
 }
 
@@ -109,12 +109,12 @@ func GetRecordByPatient(c *gin.Context) {
 // @Success 200 {string} string "{"data": "挂号记录"}"
 // @Router /api/getRecordList [get]
 func GetList(c *gin.Context) {
-	var registration mysql.Registration
+	var registration service.Registration
 	err := c.ShouldBindJSON(&registration)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
 		return
 	}
-	records := mysql.GetList(&registration)
+	records := service.GetList(&registration)
 	c.JSON(200, gin.H{"data": records})
 }

@@ -1,7 +1,8 @@
-package mysql
+package service
 
 import (
 	"gorm.io/gorm"
+	"service/global"
 )
 
 // Medic 医生
@@ -32,7 +33,7 @@ func (Medic) TableName() string {
 }
 
 func InsertMedic(m *Medic) (int, string) {
-	db.Create(m)
+	global.GVA_DATABASE.Create(m)
 	return 200, "注册成功"
 }
 
@@ -45,7 +46,7 @@ func GetMedicList(m *Medic) []Medic {
 		order = m.Sort
 	}
 
-	query := db.Model(&Medic{})
+	query := global.GVA_DATABASE.Model(&Medic{})
 	if m.Name != "" {
 		query = query.Where("name LIKE ?", "%"+m.Name+"%")
 	}
@@ -67,7 +68,7 @@ func GetMedicList(m *Medic) []Medic {
 	}
 
 	query.Preload("Department").Preload("User", func(db *gorm.DB) *gorm.DB {
-		return db.Select("id, user_name, email, role")
+		return global.GVA_DATABASE.Select("id, user_name, email, role")
 	}).Find(&medicList).Order(order)
 	return medicList
 }

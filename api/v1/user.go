@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"service/dao/mysql"
+	"service/service"
 	"service/utils/httputils"
 )
 
@@ -44,7 +44,7 @@ func Register(c *gin.Context) {
 	}
 
 	// 校验用户是否存在
-	code := mysql.CheckUserByEmail(req.Email)
+	code := service.CheckUserByEmail(req.Email)
 	if code != httputils.StatusOK {
 		c.JSON(code, gin.H{
 			"code": code,
@@ -53,7 +53,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user := mysql.User{
+	user := service.User{
 		UserName: req.UserName,
 		PassWord: req.PassWord,
 		Email:    req.Email,
@@ -61,7 +61,7 @@ func Register(c *gin.Context) {
 		Address:  req.Address,
 	}
 	// 注册用户表
-	mysql.RegisterUser(&user)
+	service.RegisterUser(&user)
 
 	// 注册医生
 	if user.Role == 0 {
@@ -80,7 +80,7 @@ func Register(c *gin.Context) {
 }
 
 func createMedic(req *requestParam, id uint) {
-	medic := mysql.Medic{
+	medic := service.Medic{
 		Name:         req.UserName,
 		Profession:   req.Profession,
 		WorkTime:     req.WorkTime,
@@ -89,13 +89,13 @@ func createMedic(req *requestParam, id uint) {
 		DepartmentID: req.DepartmentId,
 		UserID:       id,
 	}
-	mysql.InsertMedic(&medic)
+	service.InsertMedic(&medic)
 }
 
 func createPatient(req *requestParam, id uint) {
-	patient := mysql.Patient{
+	patient := service.Patient{
 		Name:    req.UserName,
 		User_Id: id,
 	}
-	mysql.InsertPatient(&patient)
+	service.InsertPatient(&patient)
 }

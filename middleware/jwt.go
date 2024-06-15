@@ -4,11 +4,11 @@ import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"service/config"
+	"service/global"
 	"time"
 )
 
-var JWTKEY = []byte(config.JwtKey)
+var JWTKEY = []byte(global.GVA_SETTING.JWT.JwtKey)
 
 type Claims struct {
 	UserName string `json:"userName"`

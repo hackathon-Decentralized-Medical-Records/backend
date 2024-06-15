@@ -1,6 +1,9 @@
-package mysql
+package service
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+	"service/global"
+)
 
 // Department 科室
 type Department struct {
@@ -15,6 +18,6 @@ func (Department) TableName() string {
 func GetDepartment() []Department {
 
 	var departments []Department
-	db.Find(&departments)
+	global.GVA_DATABASE.Find(&departments)
 	return departments
 }

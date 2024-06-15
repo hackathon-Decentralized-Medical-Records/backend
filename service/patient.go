@@ -1,7 +1,8 @@
-package mysql
+package service
 
 import (
 	"gorm.io/gorm"
+	"service/global"
 )
 
 // Patient 患者
@@ -16,7 +17,7 @@ func (Patient) TableName() string {
 }
 
 func InsertPatient(entity *Patient) {
-	tx := db.Create(entity)
+	tx := global.GVA_DATABASE.Create(entity)
 	if tx.Error != nil {
 		panic(tx.Error)
 	}

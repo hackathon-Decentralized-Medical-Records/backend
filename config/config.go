@@ -1,54 +1,19 @@
 package config
 
-import (
-	"github.com/fsnotify/fsnotify"
-	"github.com/spf13/viper"
-	"service/log"
-)
-
-var (
-	ServerName     string
-	ServerPort     string
-	LogConfigMode  int
-	EthApiKeyUrl   string
-	EthContractUrl string
-	MysqlHost      string
-	MysqlPort      int
-	MysqlUser      string
-	MysqlPassword  string
-	MysqlDbname    string
-	JwtKey         string
-)
-
-func Init() {
-	// 读取 配置文件
-	viper.SetConfigName("config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./")
-	err := viper.ReadInConfig()
-	if err != nil {
-		log.Error("viper.ReadInConfig() failed, err:%v\n", err)
-		return
-	}
-	// 监控 配置文件更改
-	viper.WatchConfig()
-	viper.OnConfigChange(
-		func(in fsnotify.Event) {
-			log.Error("The configuration file has been modified.")
-		})
+type Setting struct {
+	JWT      JWT      `mapstructure:"jwt"`
+	Logrus   Logrus   `mapstructure:"logrus"`
+	Database Database `mapstructure:"database"`
+	Cors     CORS     `mapstructure:"cors"`
+	System   System   `mapstructure:"system"`
+	Ethereum Ethereum `mapstructure:"ethereum"`
+	Redis    Redis    `mapstructure:"redis"`
 }
 
-func LoadConfig() {
-	ServerName = viper.GetString("server.name")
-	ServerPort = viper.GetString("server.port")
-	EthApiKeyUrl = viper.GetString("eth.apiKeyUrl")
-	EthContractUrl = viper.GetString("eth.contractUrl")
-	LogConfigMode = viper.GetInt("LogConfig.mode")
-	ServerName = viper.GetString("server.name")
-	MysqlHost = viper.GetString("mysql.host")
-	MysqlPort = viper.GetInt("mysql.port")
-	MysqlUser = viper.GetString("mysql.user")
-	MysqlPassword = viper.GetString("mysql.password")
-	MysqlDbname = viper.GetString("mysql.dbname")
-	JwtKey = viper.GetString("jwt.key")
-}
+const (
+	ConfigEnv         = "GVA_CONFIG"
+	ConfigDefaultFile = "config.yaml"
+	ConfigTestFile    = "config.test.yaml"
+	ConfigDebugFile   = "config.debug.yaml"
+	ConfigReleaseFile = "config.release.yaml"
+)
