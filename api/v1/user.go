@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"service/model"
 	"service/service"
 	"service/utils/httputils"
 )
@@ -53,7 +54,7 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	user := service.User{
+	user := model.User{
 		UserName: req.UserName,
 		PassWord: req.PassWord,
 		Email:    req.Email,
@@ -80,7 +81,7 @@ func Register(c *gin.Context) {
 }
 
 func createMedic(req *requestParam, id uint) {
-	medic := service.Medic{
+	medic := model.Medic{
 		Name:         req.UserName,
 		Profession:   req.Profession,
 		WorkTime:     req.WorkTime,
@@ -93,7 +94,7 @@ func createMedic(req *requestParam, id uint) {
 }
 
 func createPatient(req *requestParam, id uint) {
-	patient := service.Patient{
+	patient := model.Patient{
 		Name:    req.UserName,
 		User_Id: id,
 	}

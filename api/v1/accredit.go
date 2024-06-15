@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"service/model"
 	"service/service"
 	"strconv"
 	"strings"
@@ -44,7 +45,7 @@ func InertAccredit(c *gin.Context) {
 			}
 			u := uint(parseUint)
 
-			accredut := service.Accredut{
+			accredut := model.Accredut{
 				MedicId:        entity.MedicId,
 				RegistrationId: entity.RegistrationId,
 				CaseId:         u,
@@ -63,7 +64,7 @@ func InertAccredit(c *gin.Context) {
 		}
 		u := uint(parseUint)
 
-		entity := service.Accredut{
+		entity := model.Accredut{
 			MedicId:        entity.MedicId,
 			RegistrationId: entity.RegistrationId,
 			CaseId:         u,
@@ -88,7 +89,7 @@ func InertAccredit(c *gin.Context) {
 // @Success 200 {string} string "{"data": "accredits"}"
 // @Router /accredit/getAccredit [POST]
 func GetAccredit(c *gin.Context) {
-	var entity service.Accredut
+	var entity model.Accredut
 	if err := c.ShouldBindQuery(&entity); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return

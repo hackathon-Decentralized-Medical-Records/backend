@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"service/model"
 	"service/service"
 	"strconv"
 )
@@ -15,7 +16,7 @@ import (
 // @Success 200 {string} string "{"msg": "success"}"
 // @Router /case/save [post]
 func InsertCase(c *gin.Context) {
-	var entity service.Case
+	var entity model.Case
 	if err := c.ShouldBindJSON(&entity); err != nil {
 		c.JSON(400, gin.H{"msg": err.Error()})
 		return

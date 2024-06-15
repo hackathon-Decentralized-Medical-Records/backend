@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"service/model"
 	"service/service"
 	"strconv"
 )
@@ -16,7 +17,7 @@ import (
 // @Success 200 {string} string "{"message": "挂号成功"}"
 // @Router /api/registration [post]
 func CreateRecord(c *gin.Context) {
-	var registration service.Registration
+	var registration model.Registration
 	err := c.ShouldBindJSON(&registration)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
@@ -40,7 +41,7 @@ func CreateRecord(c *gin.Context) {
 // @Success 200 {string} string "{"message": "更新成功"}"
 // @Router /api/updateRecordStatus [post]
 func UpdateRecordStatus(c *gin.Context) {
-	var registration service.Registration
+	var registration model.Registration
 	err := c.ShouldBindJSON(&registration)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})
@@ -109,7 +110,7 @@ func GetRecordByPatient(c *gin.Context) {
 // @Success 200 {string} string "{"data": "挂号记录"}"
 // @Router /api/getRecordList [get]
 func GetList(c *gin.Context) {
-	var registration service.Registration
+	var registration model.Registration
 	err := c.ShouldBindJSON(&registration)
 	if err != nil {
 		c.JSON(400, gin.H{"message": "参数错误"})

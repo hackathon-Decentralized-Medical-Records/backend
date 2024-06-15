@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"service/middleware"
+	. "service/model"
 )
 
 // 登录
